@@ -17,6 +17,13 @@ import java.io.IOException;
  *  2、创建对象考虑线程安全问题
  *  3、是否延迟加载
  *  4、考虑getInstance()性能是否高（是否加锁）
+ *
+ * 单例存在的问题：
+ *  1、单例对OOP特性的支持不友好
+ *  2、单例会隐藏类之间的依赖关系
+ *  3、单例对代码的扩展性不友好
+ *  4、单例对代码的可测试性不友好
+ *  5、单例不支持有参数的构造函数
  */
 public class LogTest {
     public static void main(String[] args) {
