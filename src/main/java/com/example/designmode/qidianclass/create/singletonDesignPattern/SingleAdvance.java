@@ -1,6 +1,5 @@
-package com.example.designmode.qidianclass.singletonDesignPattern;
+package com.example.designmode.qidianclass.create.singletonDesignPattern;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
