@@ -1,6 +1,11 @@
 package com.example.designmode.qidianclass.create.singletonDesignPattern;
 
+import com.alibaba.fastjson.JSONObject;
+
+import java.io.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 1、如何理解单例模式中的唯一性？
@@ -10,7 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * 4、如何实现一个多例模式？
  */
 public class SingleAdvance {
-
+    public static void main(String[] args) {
+        JiQunIdGenerator instance = JiQunIdGenerator.getInstance();
+        instance.freeInstance();
+        System.out.println("1:" + instance);
+        JiQunIdGenerator instance1 = JiQunIdGenerator.getInstance();
+        instance1.freeInstance();
+        System.out.println("2:" + instance1);
+    }
 }
 
 /**
@@ -42,4 +54,58 @@ class IdGenerator{
  *  为了保证任何时刻，在进程间都只有一份对象存在，一个进程在获取到对象之后，需要对对象加锁，避免其他进程再将其获取。在进程使用完这个对象之后，还需要显式
  *  地将对象从内存中删除，并且释放对象的加锁
  */
+class JiQunIdGenerator{
+
+    private static JiQunIdGenerator jiQunIdGenerator;
+
+    private static ObjectInputStream ois;
+
+    private static ObjectOutputStream oos;
+
+    private static Lock lock = new ReentrantLock();
+
+    static {
+        try {
+            oos = new ObjectOutputStream(new FileOutputStream("/Users/liuyuyang/logs/test.txt"));
+            ois = new ObjectInputStream(new FileInputStream("/Users/liuyuyang/logs/test.txt"));
+            oos.write(JSONObject.toJSONBytes(JiQunIdGenerator.class));
+        } catch (IOException e) {
+            System.out.println("static 报错");
+            e.printStackTrace();
+        }
+    }
+
+    private JiQunIdGenerator(){
+
+    }
+
+    //获取对象
+    public static JiQunIdGenerator getInstance(){
+        if (jiQunIdGenerator == null){
+            lock.lock();
+            try {
+                //获取对象
+                jiQunIdGenerator = (JiQunIdGenerator) ois.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("getInstance 报错");
+                e.printStackTrace();
+            }
+        }
+        return jiQunIdGenerator;
+    }
+
+    //当对象用完之后
+    public synchronized void freeInstance(){
+        try {
+            oos.write(JSONObject.toJSONBytes(jiQunIdGenerator));
+            jiQunIdGenerator = null;
+        } catch (IOException e) {
+            System.out.println("freeInstance 报错");
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+        }
+
+    }
+}
 
