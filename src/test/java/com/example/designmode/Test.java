@@ -12,8 +12,17 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 public class Test extends DesignmodeApplicationTests{
 
+    private static String appName = null;
+
     @org.junit.jupiter.api.Test
     public void test(){
 
     }
+
+    public static void mytest(){
+        if (appName != null){
+            return;
+        }
+    }
+
 }
