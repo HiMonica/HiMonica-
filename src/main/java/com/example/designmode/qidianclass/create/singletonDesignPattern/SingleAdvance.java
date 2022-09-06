@@ -30,6 +30,7 @@ public class SingleAdvance {
  *  1、其实很简单可以通过一个HashMap来存储对象，其中key是线程ID，value是对象
  *  2、ThreadLocal工具类：底层实现原理也是基于HashMap
  */
+//用hashMap
 class IdGenerator{
 
     private static final ConcurrentHashMap<Long, IdGenerator> hashMap = new ConcurrentHashMap<>();
@@ -43,6 +44,34 @@ class IdGenerator{
         //putIfAbsent：如果相同就放弃还是用原来的值
         hashMap.putIfAbsent(id,new IdGenerator());
         return hashMap.get(id);
+    }
+}
+
+//ThreadLocal单例
+class MyThreadLocal{
+
+    private ThreadLocal<MyThreadLocal> threadLocal = new ThreadLocal(){
+        @Override
+        protected MyThreadLocal initialValue() {
+            return new MyThreadLocal();
+        }
+    };
+
+    private MyThreadLocal(){}
+
+    public MyThreadLocal getInstance(){
+        return threadLocal.get();
+    }
+
+    public static void main(String[] args) {
+        MyThreadLocal myThreadLocal = new MyThreadLocal();
+        System.out.println(myThreadLocal.getInstance());
+        System.out.println(myThreadLocal.getInstance());
+
+        new Thread(() -> {
+            System.out.println(myThreadLocal.getInstance());
+            System.out.println(myThreadLocal.getInstance());
+        }).start();
     }
 }
 
