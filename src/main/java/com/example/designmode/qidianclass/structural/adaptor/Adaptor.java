@@ -8,5 +8,9 @@ package com.example.designmode.qidianclass.structural.adaptor;
  * 4、兼容老版本接口
  * 5、适配不同格式的数据
  */
+
+/**
+ * 一个经典的应用场景：Spring中的日志适配，因为不同的人用的日志类是不同的有Sl4j等需要适配
+ */
 public class Adaptor {
 }
