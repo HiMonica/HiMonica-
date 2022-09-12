@@ -6,8 +6,10 @@ import cn.hutool.aop.aspects.SimpleAspect;
 import cn.hutool.core.swing.RobotUtil;
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
+import org.springframework.lang.Nullable;
 
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class huiduiTest {
 
@@ -20,12 +22,15 @@ public class huiduiTest {
 
     @Test
     public void test1(){
-        Class<huiduiTest> clazz = huiduiTest.class;
-        String simpleName = clazz.getName();
-        System.out.println(simpleName);
+        int a = -1;
+
+
     }
 }
 
-class User{
+class MyLock extends ReentrantLock{
 
+    public void test(){
+        lock();
+    }
 }
