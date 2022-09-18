@@ -129,3 +129,10 @@ class ChessBoard1{
         chessPiece1Map.put(1, new ChessPiece1(ChessPieceUnitFactory.get(1), 0, 0));
     }
 }
+
+
+/**
+ * 享元模式在Java中的使用
+ * 1、IntegerCache就是Integer的享元工厂类
+ * 2、String中的常量池
+ */
