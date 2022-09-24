@@ -2,8 +2,11 @@ package com.example.designmode.行为型设计模式.观察者模式;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 /**
+ * 最简单的运用线程池完成异步非阻塞，缺点不能复用
+ *
  * @author julu
  * @date 2022/9/18 16:56
  */
@@ -50,7 +53,13 @@ interface UserService{
 class UserController{
     private UserService userService;
 
+    private Executor executor;
+
     private List<RegObserver> regObservers = new ArrayList<>();
+
+    public UserController(Executor executor) {
+        this.executor = executor;
+    }
 
     public void setRegObservers(List<RegObserver> regObservers) {
         this.regObservers = regObservers;
@@ -60,8 +69,11 @@ class UserController{
 
         Long userId = userService.register(telephone, password);
 
+
         for (RegObserver regObserver : regObservers) {
-            regObserver.handleRegSuccess(userId);
+            executor.execute(() -> {
+                regObserver.handleRegSuccess(userId);
+            });
         }
 
         return userId;
